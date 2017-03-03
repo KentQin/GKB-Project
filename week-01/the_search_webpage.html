@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+
+	<link href="search_box_style.css" rel="stylesheet" type="text/css"/>
+
+	<script src="https://unpkg.com/react@latest/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+	<title>
+		The Search Webpage
+	</title>
+</head>
+<body>
+<div id="search_box"></div>
+
+<script type="text/babel">
+	var ResultItem = React.createClass({
+	  	getInitialState: function() {
+	    	return {
+	      		/* iniClicks: 10,*/
+	      		clicks: this.props.clicks,
+	      		liked: false
+	    	};
+	  	},
+
+	  	onThumbClicker: function() {
+	  		if (this.state.liked) {
+	  			this.setState({
+	      			clicks: this.state.clicks - 1,
+	      			liked: false
+	    		})
+	  		} else {
+	  			this.setState({
+	  				clicks: this.state.clicks + 1,
+	  				liked: true
+	  			})
+	  		}
+	  	},
+
+
+	  	render: function() {
+			var thumbClassName;
+			var resultBoxClassName = "result_box";
+			if(this.state.liked){
+				thumbClassName = 'thumbUp';
+				if (this.props.userRank == 1) {
+					thumbClassName += " first_thumbUp";
+					resultBoxClassName += " first_result_box";
+				}
+			} else {
+				thumbClassName = 'thumb';
+				if (this.props.userRank == 1) {
+					thumbClassName += " first_thumb";
+					resultBoxClassName += " first_result_box";
+				}
+			}
+
+	    	return (
+	      		<div className = {resultBoxClassName}>
+						<div className = "user_box">
+							<span>No. {this.props.userRank}</span>
+							<img src = "./img/user.png" className = "user" />
+							<span>User {this.props.userName}</span>
+						</div>
+						<div className = "like_box">
+							<div><img src = "./img/thumb.png" onClick = {this.onThumbClicker} className = {thumbClassName} /></div>
+		        			<div ><span>{this.state.clicks}</span></div>
+						</div>
+						<p>
+							<span><strong>Discription: </strong></span>{this.props.discription}
+						</p>				
+	      		</div>
+
+	    	);
+	  	}
+	});	
+
+	var ResultTable = React.createClass({
+
+		onClickDis: function(evt){
+			alert("You clicked Discription!!!");
+		},
+
+		onClickAdd: function(evt){
+			alert("You clicked Add!!!");
+		},
+
+
+
+		render: function() {
+			var items = [];
+			var users = ['A','B','C'];
+			var counts = [10,8,3];
+			for (var i = 0; i < this.props.numItems; i++) {
+				items.push(
+					<ResultItem userRank = {i+1} userName = {users[i]} clicks = {counts[i]}  discription = 'It is a five-storey building and it has a lawn in front of it.'/>
+				);
+			}
+
+			return (
+				<div className = "result_container">
+					<table className = 'result_table'>
+						<tbody>
+							<tr><td>
+								<div><span>Location Description</span>
+									<div id = "add_dis_box">
+										<buttom id = "discription" onClick = {this.onClickDis}>Discription</buttom>
+										<img id = "add" src = "./img/add.png" onClick = {this.onClickAdd}/>
+									</div>
+								</div></td></tr>
+							<tr><td>{items[0]}</td></tr>
+							<tr><td>{items[1]}</td></tr>
+							<tr><td>{items[2]}</td></tr>
+						</tbody>
+					</table>
+				</div>
+			);
+		}
+	})
+
+
+	ReactDOM.render(
+  		<ResultTable numItems = {3}/>,
+  		document.getElementById('search_box')
+	);
+</script>
+	
+
+<!-- 	<div>
+		<p>
+			<span>No.1</span>
+			<img class="user" src="./img/user.png">
+			<span>User A</span>
+		</p>
+		<p>
+			<span>Discription: </span>
+		</p>
+	</div> -->
+</body>
+</html>
